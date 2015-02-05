@@ -10,15 +10,24 @@ import org.springframework.stereotype.Repository;
 import java.util.Calendar;
 import com.summer.springangular.model.Announcement;
 
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+
+/**
+ * AnnouncementService uses to connect to MongoTemplate bean.
+ * add, update , delete operations are done by using MongoTemplate.
+ *
+ */
+
 @Repository
 public class AnnouncementService {
-
 	
 	@Autowired
 	private MongoTemplate mongoTemplate;
 	
 	public static final String COLLECTION_NAME = "announcement";
-	
+
 	public void addAnnouncement(Announcement announcement) {
 		if (!mongoTemplate.collectionExists(Announcement.class)) {
 			mongoTemplate.createCollection(Announcement.class);
@@ -42,4 +51,7 @@ public class AnnouncementService {
 		mongoTemplate.insert(announcement, COLLECTION_NAME);		
 	}
 	
+	public Announcement findById(String announcementId) {
+		return mongoTemplate.findById(announcementId, Announcement.class, COLLECTION_NAME);		
+	}
 }
